@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    border: 2px solid slateblue;
+    padding: 30px;
+}
+
+.buttons-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.buttons-container button:last-child {
+    grid-column: span 2;
+}
