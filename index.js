@@ -1,6 +1,9 @@
+const digits = document.querySelectorAll('.digit');
+
 let firstNum = 0;
 let secondNum = 0;
 let operator = "";
+let display = "";
 
 function add(a, b) {
     return a + b
@@ -36,3 +39,11 @@ function operate(operator, firstNum, secondNum) {
     };
     
 };
+
+digits.forEach(digit => {
+    digit.addEventListener("click", function() {
+        const value = this.textContent;
+        display += value;
+        console.log(display);
+    })
+});
