@@ -56,7 +56,7 @@ function operate(chosenOperator, firstNum, secondNum) {
         substract(firstNum, secondNum)
     };
 
-    if (chosenOperator === "*") {
+    if (chosenOperator === "x") {
         multiply(firstNum, secondNum)
     };
 
