@@ -2,6 +2,7 @@ const digits = document.querySelectorAll('.digit');
 const operators = document.querySelectorAll('.operator');
 const displayElement = document.getElementById('display');
 const resultBtn = document.getElementById('resultBtn');
+const clearBtn = document.getElementById('clearBtn');
 
 let firstNum = "";
 let secondNum = "";
@@ -92,10 +93,16 @@ operators.forEach(operator => {
     operator.addEventListener("click", function() {
         const value = this.textContent;
         if (chosenOperator.length > 0) {
-            preOperate();
-            updateDisplay();
-            operate(chosenOperator, +firstNum, +secondNum);
-        }
+            if (firstNum.length > 0 && secondNum.length > 0) {
+                preOperate();
+                updateDisplay();
+                operate(chosenOperator, +firstNum, +secondNum);
+            } else {
+                // update display so that shows only one operator and re-writes the operator if user chosed another one
+                //chosenOperator = value;
+                //displayStorage = `${firstNum} ${chosenOperator}`
+            }
+        };
         chosenOperator = value;
         displayStorage += ` ${value} `;
         isSecondNum = true;
@@ -108,5 +115,12 @@ resultBtn.addEventListener("click", function() {
         preOperate();
         updateDisplay();
         operate(chosenOperator, +firstNum, +secondNum);
-    }
+    };
 });
+
+clearBtn.addEventListener("click", function() {
+    refreshStorages();
+    displayStorage = "";
+    isSecondNum = false;
+    updateDisplay();
+})
