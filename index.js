@@ -98,10 +98,10 @@ operators.forEach(operator => {
                 updateDisplay();
                 operate(chosenOperator, +firstNum, +secondNum);
             } else {
-                // update display so that shows only one operator and re-writes the operator if user chosed another one
-                //chosenOperator = value;
-                //displayStorage = `${firstNum} ${chosenOperator}`
-            }
+                chosenOperator = value;
+                displayStorage = `${firstNum} ${chosenOperator} `
+                return updateDisplay();
+            };
         };
         chosenOperator = value;
         displayStorage += ` ${value} `;
