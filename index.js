@@ -3,17 +3,22 @@ const operators = document.querySelectorAll('.operator');
 const displayElement = document.getElementById('display');
 const resultBtn = document.getElementById('resultBtn');
 const clearBtn = document.getElementById('clearBtn');
+const percentageBtn = document.getElementById('percentageBtn');
+const decimalBtn = document.getElementById('decimalBtn');
 
 let firstNum = "";
 let secondNum = "";
 let chosenOperator = "";
 let displayStorage = "";
 let isSecondNum = false;
+let isPercentage = false;
+let isDecimalUsed = false;
 
 function refreshStorages() {
     firstNum = "";
     secondNum = "";
     chosenOperator = "";
+    isDecimalUsed = false;
 };
 
 function updateDisplay() {
@@ -52,6 +57,15 @@ function divide(a, b) {
     updateDisplay();
 };
 
+// function percentage(chosenOperator, a, b) {
+//     let itsPercentage = (a / b) * 100;
+//     let result = (a * b).toFixed(2).replace(/\.?0*$/,'');
+//     refreshStorages();
+//     firstNum += result;
+//     displayStorage += result;
+//     updateDisplay();
+// };
+
 function operate(chosenOperator, firstNum, secondNum) {
     if (chosenOperator === "+") {
         add(firstNum, secondNum)
@@ -68,17 +82,24 @@ function operate(chosenOperator, firstNum, secondNum) {
     if (chosenOperator === "/") {
         divide(firstNum, secondNum)
     };
-    
 };
 
 digits.forEach(digit => {
     digit.addEventListener("click", function() {
         const value = this.textContent;
+
+        if (value === "." && isDecimalUsed === false) {
+            isDecimalUsed = true;
+        } else if (value === "." && isDecimalUsed === true) {
+            return null;
+        };
+
         if (isSecondNum) {
             secondNum += value;
         } else {
             firstNum += value;
         };
+
         displayStorage += value;
         updateDisplay();
     });
@@ -106,6 +127,7 @@ operators.forEach(operator => {
         chosenOperator = value;
         displayStorage += ` ${value} `;
         isSecondNum = true;
+        isDecimalUsed = false;
         updateDisplay();
     });
 });
@@ -123,4 +145,9 @@ clearBtn.addEventListener("click", function() {
     displayStorage = "";
     isSecondNum = false;
     updateDisplay();
-})
+});
+
+// percentageBtn.addEventListener("click", function() {
+//     isPercentage = !isPercentage;
+//     percentage(chosenOperator, firstNum, secondNum)
+// });
