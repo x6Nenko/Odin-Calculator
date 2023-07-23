@@ -15,6 +15,10 @@ function refreshStorages() {
     chosenOperator = "";
 };
 
+function updateDisplay() {
+    displayElement.innerText = displayStorage;
+};
+
 function add(a, b) {
     let result = a + b;
     refreshStorages();
@@ -79,13 +83,19 @@ digits.forEach(digit => {
     });
 });
 
-function updateDisplay() {
-    displayElement.innerText = displayStorage;
+function preOperate() {
+    displayStorage += " = ";
+    isSecondNum = false;
 };
 
 operators.forEach(operator => {
     operator.addEventListener("click", function() {
         const value = this.textContent;
+        if (chosenOperator.length > 0) {
+            preOperate();
+            updateDisplay();
+            operate(chosenOperator, +firstNum, +secondNum);
+        }
         chosenOperator = value;
         displayStorage += ` ${value} `;
         isSecondNum = true;
@@ -94,8 +104,7 @@ operators.forEach(operator => {
 });
 
 resultBtn.addEventListener("click", function() {
-    displayStorage += " =";
-    isSecondNum = false;
+    preOperate();
     updateDisplay();
     operate(chosenOperator, +firstNum, +secondNum);
 });
