@@ -104,7 +104,9 @@ operators.forEach(operator => {
 });
 
 resultBtn.addEventListener("click", function() {
-    preOperate();
-    updateDisplay();
-    operate(chosenOperator, +firstNum, +secondNum);
+    if (firstNum.length > 0 && secondNum.length > 0) {
+        preOperate();
+        updateDisplay();
+        operate(chosenOperator, +firstNum, +secondNum);
+    }
 });
