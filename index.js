@@ -20,7 +20,7 @@ function updateDisplay() {
 };
 
 function add(a, b) {
-    let result = (a + b).toFixed(2);
+    let result = (a + b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     firstNum += result;
     displayStorage += result;
@@ -28,7 +28,7 @@ function add(a, b) {
 };
 
 function substract(a, b) {
-    let result = (a - b).toFixed(2);
+    let result = (a - b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     firstNum += result;
     displayStorage += result;
@@ -36,7 +36,7 @@ function substract(a, b) {
 };
 
 function multiply(a, b) {
-    let result = (a * b).toFixed(2);
+    let result = (a * b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     firstNum += result;
     displayStorage += result;
@@ -44,7 +44,7 @@ function multiply(a, b) {
 };
 
 function divide(a, b) {
-    let result = (a / b).toFixed(2);
+    let result = (a / b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     firstNum += result;
     displayStorage += result;
