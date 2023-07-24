@@ -1,6 +1,7 @@
 const digits = document.querySelectorAll('.digit');
 const operators = document.querySelectorAll('.operator');
 const displayElement = document.getElementById('display');
+const previousDisplayElement = document.getElementById('previousDisplay');
 const resultBtn = document.getElementById('resultBtn');
 const clearBtn = document.getElementById('clearBtn');
 const percentageBtn = document.getElementById('percentageBtn');
@@ -11,6 +12,7 @@ let firstNum = "";
 let secondNum = "";
 let chosenOperator = "";
 let displayStorage = "";
+let displayPreviousStorage = "";
 
 let isSecondNum = false;
 let isPercentageUsed = false;
@@ -34,6 +36,7 @@ function refreshPercentages() {
 
 function updateDisplay() {
     displayElement.innerText = displayStorage;
+    previousDisplayElement.innerText = displayPreviousStorage;
 };
 
 function ifDecimalResult(result) {
@@ -46,12 +49,17 @@ function ifDecimalResult(result) {
     };
 };
 
+function updateStorages(result) {
+    firstNum += result;
+    displayPreviousStorage = displayStorage + result;
+    displayStorage = result;
+}
+
 function add(a, b) {
     let result = (a + b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     ifDecimalResult(result);
-    firstNum += result;
-    displayStorage += result;
+    updateStorages(result);
     updateDisplay();
 };
 
@@ -59,8 +67,7 @@ function substract(a, b) {
     let result = (a - b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     ifDecimalResult(result);
-    firstNum += result;
-    displayStorage += result;
+    updateStorages(result);
     updateDisplay();
 };
 
@@ -68,8 +75,7 @@ function multiply(a, b) {
     let result = (a * b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     ifDecimalResult(result);
-    firstNum += result;
-    displayStorage += result;
+    updateStorages(result);
     updateDisplay();
 };
 
@@ -77,8 +83,7 @@ function divide(a, b) {
     let result = (a / b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
     ifDecimalResult(result);
-    firstNum += result;
-    displayStorage += result;
+    updateStorages(result);
     updateDisplay();
 };
 
@@ -115,6 +120,10 @@ function operate(chosenOperator, firstNum, secondNum) {
 digits.forEach(digit => {
     digit.addEventListener("click", function() {
         const value = this.textContent;
+
+        if (displayPreviousStorage.length > 0 && !isSecondNum) {
+            return null;
+        };
 
         if (value === "." && isDecimalUsed === false) {
             isDecimalUsed = true;
@@ -210,6 +219,7 @@ resultBtn.addEventListener("click", function() {
 clearBtn.addEventListener("click", function() {
     refreshStorages();
     displayStorage = "";
+    displayPreviousStorage = "";
     isSecondNum = false;
     updateDisplay();
 });
