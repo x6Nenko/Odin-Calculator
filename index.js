@@ -32,7 +32,7 @@ function refreshStorages() {
 function refreshPercentages() {
     firstNumPercentage = "";
     secondNumPercentage = "";
-}
+};
 
 function updateDisplay() {
     displayElement.innerText = displayStorage;
@@ -123,13 +123,47 @@ digits.forEach(digit => {
             return null;
         };
 
+        // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
         if (value === "." && isDecimalUsed === false) {
+            if (isSecondNum) {
+                let secondNumStorageArr = secondNum.split("");
+                let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
+
+                let storageArr = displayStorage.split("");
+                let lastStorageEl = storageArr[storageArr.length - 1];
+
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                    return null;
+                };
+            } else if (!isSecondNum) {
+                let firstNumStorageArr = firstNum.split("");
+                let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+
+                let storageArr = displayStorage.split("");
+                let lastStorageEl = storageArr[storageArr.length - 1];
+
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                    return null;
+                };
+            };
+
+            console.log("trigger");
             isDecimalUsed = true;
         } else if (value === "." && isDecimalUsed === true) {
             return null;
         };
 
         if (value === "%" && isPercentageUsed === false) {
+            // Remove the previosly chosen operator because instead of typing the second number, the user pressed "%" (he wants to put it instead of the operator).
+            if (isSecondNum && secondNum.length === 0) {
+                let storageArr = displayStorage.split("");
+                isSecondNum = false;
+                chosenOperator = "";
+                storageArr.splice(-3, 3);
+                displayStorage = storageArr.join("");
+                updateDisplay();
+            };
+
             isPercentageUsed = true;
 
             if (isSecondNum) {
@@ -225,20 +259,65 @@ clearBtn.addEventListener("click", function() {
 backspaceBtn.addEventListener("click", function() {
     let storageArr = displayStorage.split("");
     let lastIndex = storageArr.length -1;
-    console.log(storageArr[lastIndex]);
 
-    // Block possibility to edit previous operation
+    // Block the possibility of editing a previous operation.
     if (displayPreviousStorage.length > 0 && !isSecondNum) {
         return null;
     };
 
+    // Remove the previously chosen operator.
+    if (storageArr[lastIndex] === " ") {
+        isSecondNum = false;
+        chosenOperator = "";
+        storageArr.splice(-3, 3);
+        displayStorage = storageArr.join("");
+        return updateDisplay();
+    };
+
     if (storageArr[lastIndex] === ".") {
-        console.log("dot");
+        isDecimalUsed = false;
 
+        // Remove decimals from the numbers storage.
+        if (isSecondNum) {
+            let secondNumStorageArr = secondNum.split("");
+            secondNumStorageArr.pop();
+            secondNum = secondNumStorageArr.join("");
+        } else {
+            let firstNumStorageArr = firstNum.split("");
+            firstNumStorageArr.pop();
+            firstNum = firstNumStorageArr.join("");
+        };
+
+        storageArr.pop();
+        displayStorage = storageArr.join("");
+        return updateDisplay();
     } else if (storageArr[lastIndex] === "%") {
-        console.log("percent");
-    } else if (storageArr[lastIndex] === "operator"){
+        isPercentageUsed = false;
 
-    }
-    console.log(storageArr);
+        // Remove unneeded previous percentage calculations.
+        if (isSecondNum) {
+            secondNumPercentage = "";
+        } else {
+            refreshPercentages();
+        };
+
+        storageArr.pop();
+        displayStorage = storageArr.join("");
+        return updateDisplay();
+    };
+
+    // Remove the number from a number storage.
+    if (isSecondNum) {
+        let secondNumStorageArr = secondNum.split("");
+        secondNumStorageArr.pop();
+        secondNum = secondNumStorageArr.join("");
+    } else {
+        let firstNumStorageArr = firstNum.split("");
+        firstNumStorageArr.pop();
+        firstNum = firstNumStorageArr.join("");
+    };
+
+    storageArr.pop();
+    displayStorage = storageArr.join("");
+    return updateDisplay();
 });
