@@ -5,6 +5,7 @@ const resultBtn = document.getElementById('resultBtn');
 const clearBtn = document.getElementById('clearBtn');
 const percentageBtn = document.getElementById('percentageBtn');
 const decimalBtn = document.getElementById('decimalBtn');
+const backspaceBtn = document.getElementById('backspaceBtn');
 
 let firstNum = "";
 let secondNum = "";
@@ -35,9 +36,20 @@ function updateDisplay() {
     displayElement.innerText = displayStorage;
 };
 
+function ifDecimalResult(result) {
+    let resultArr = result.split("");
+
+    for (let i = 0; i < resultArr.length; i++) {
+        if (resultArr[i] === ".") {
+            isDecimalUsed = true;
+        };
+    };
+};
+
 function add(a, b) {
     let result = (a + b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
+    ifDecimalResult(result);
     firstNum += result;
     displayStorage += result;
     updateDisplay();
@@ -46,6 +58,7 @@ function add(a, b) {
 function substract(a, b) {
     let result = (a - b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
+    ifDecimalResult(result);
     firstNum += result;
     displayStorage += result;
     updateDisplay();
@@ -54,6 +67,7 @@ function substract(a, b) {
 function multiply(a, b) {
     let result = (a * b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
+    ifDecimalResult(result);
     firstNum += result;
     displayStorage += result;
     updateDisplay();
@@ -62,6 +76,7 @@ function multiply(a, b) {
 function divide(a, b) {
     let result = (a / b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
+    ifDecimalResult(result);
     firstNum += result;
     displayStorage += result;
     updateDisplay();
@@ -197,4 +212,19 @@ clearBtn.addEventListener("click", function() {
     displayStorage = "";
     isSecondNum = false;
     updateDisplay();
+});
+
+backspaceBtn.addEventListener("click", function() {
+    let storageArr = displayStorage.split("");
+    let lastIndex = storageArr.length -1;
+    console.log(storageArr[lastIndex]);
+
+    if (storageArr[lastIndex] === ".") {
+        console.log("dot");
+    } else if (storageArr[lastIndex] === "%") {
+        console.log("percent");
+    } else if (storageArr[lastIndex] === "operator"){
+
+    }
+    console.log(storageArr);
 });
