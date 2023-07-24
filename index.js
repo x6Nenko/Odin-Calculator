@@ -39,15 +39,16 @@ function updateDisplay() {
     previousDisplayElement.innerText = displayPreviousStorage;
 };
 
-function ifDecimalResult(result) {
-    let resultArr = result.split("");
+// most likely unneeded function since I've blocked possibility to edit first operation
+// function ifDecimalResult(result) {
+//     let resultArr = result.split("");
 
-    for (let i = 0; i < resultArr.length; i++) {
-        if (resultArr[i] === ".") {
-            isDecimalUsed = true;
-        };
-    };
-};
+//     for (let i = 0; i < resultArr.length; i++) {
+//         if (resultArr[i] === ".") {
+//             isDecimalUsed = true;
+//         };
+//     };
+// };
 
 function updateStorages(result) {
     firstNum += result;
@@ -58,7 +59,6 @@ function updateStorages(result) {
 function add(a, b) {
     let result = (a + b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
-    ifDecimalResult(result);
     updateStorages(result);
     updateDisplay();
 };
@@ -66,7 +66,6 @@ function add(a, b) {
 function substract(a, b) {
     let result = (a - b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
-    ifDecimalResult(result);
     updateStorages(result);
     updateDisplay();
 };
@@ -74,7 +73,6 @@ function substract(a, b) {
 function multiply(a, b) {
     let result = (a * b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
-    ifDecimalResult(result);
     updateStorages(result);
     updateDisplay();
 };
@@ -82,7 +80,6 @@ function multiply(a, b) {
 function divide(a, b) {
     let result = (a / b).toFixed(2).replace(/\.?0*$/,'');
     refreshStorages();
-    ifDecimalResult(result);
     updateStorages(result);
     updateDisplay();
 };
@@ -121,6 +118,7 @@ digits.forEach(digit => {
     digit.addEventListener("click", function() {
         const value = this.textContent;
 
+        // Block possibility to edit previous operation
         if (displayPreviousStorage.length > 0 && !isSecondNum) {
             return null;
         };
@@ -229,8 +227,14 @@ backspaceBtn.addEventListener("click", function() {
     let lastIndex = storageArr.length -1;
     console.log(storageArr[lastIndex]);
 
+    // Block possibility to edit previous operation
+    if (displayPreviousStorage.length > 0 && !isSecondNum) {
+        return null;
+    };
+
     if (storageArr[lastIndex] === ".") {
         console.log("dot");
+
     } else if (storageArr[lastIndex] === "%") {
         console.log("percent");
     } else if (storageArr[lastIndex] === "operator"){
