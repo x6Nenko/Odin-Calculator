@@ -256,6 +256,11 @@ clearBtn.addEventListener("click", function() {
     updateDisplay();
 });
 
+function removeLastItem(storageArr) {
+    storageArr.pop();
+    displayStorage = storageArr.join("");
+};
+
 backspaceBtn.addEventListener("click", function() {
     let storageArr = displayStorage.split("");
     let lastIndex = storageArr.length -1;
@@ -288,8 +293,7 @@ backspaceBtn.addEventListener("click", function() {
             firstNum = firstNumStorageArr.join("");
         };
 
-        storageArr.pop();
-        displayStorage = storageArr.join("");
+        removeLastItem(storageArr);
         return updateDisplay();
     } else if (storageArr[lastIndex] === "%") {
         isPercentageUsed = false;
@@ -301,8 +305,7 @@ backspaceBtn.addEventListener("click", function() {
             refreshPercentages();
         };
 
-        storageArr.pop();
-        displayStorage = storageArr.join("");
+        removeLastItem(storageArr);
         return updateDisplay();
     };
 
@@ -317,7 +320,6 @@ backspaceBtn.addEventListener("click", function() {
         firstNum = firstNumStorageArr.join("");
     };
 
-    storageArr.pop();
-    displayStorage = storageArr.join("");
+    removeLastItem(storageArr);
     return updateDisplay();
 });
