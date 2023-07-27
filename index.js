@@ -39,17 +39,6 @@ function updateDisplay() {
     previousDisplayElement.innerText = displayPreviousStorage;
 };
 
-// most likely unneeded function since I've blocked possibility to edit first operation
-// function ifDecimalResult(result) {
-//     let resultArr = result.split("");
-
-//     for (let i = 0; i < resultArr.length; i++) {
-//         if (resultArr[i] === ".") {
-//             isDecimalUsed = true;
-//         };
-//     };
-// };
-
 function updateStorages(result) {
     firstNum += result;
     displayPreviousStorage = displayStorage + result;
@@ -303,6 +292,9 @@ function backspace() {
 
     // Remove the previously chosen operator.
     if (storageArr[lastIndex] === " ") {
+        if (firstNumPercentage.length > 0) {
+            isPercentageUsed = true;
+        };
         isSecondNum = false;
         chosenOperator = "";
         storageArr.splice(-3, 3);
@@ -359,7 +351,7 @@ backspaceBtn.addEventListener("click", function() {
     backspace();
 });
 
-// Keyboard support
+// ========== Keyboard support
 function controlOperator(value) {
     let pressedOperator = "";
 
@@ -482,3 +474,5 @@ document.addEventListener("keydown", function(event) {
     displayStorage += pressedBtn;
     updateDisplay();
 });
+
+// To fix: prevent possibility to use unneeded zeros before the number
