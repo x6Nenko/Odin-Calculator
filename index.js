@@ -114,6 +114,58 @@ function operate(chosenOperator, firstNum, secondNum) {
     };
 };
 
+function controlDecimals() {
+    if (isSecondNum) {
+        let secondNumStorageArr = secondNum.split("");
+        let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
+
+        let storageArr = displayStorage.split("");
+        let lastStorageEl = storageArr[storageArr.length - 1];
+
+        if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+            return null;
+        };
+    } else if (!isSecondNum) {
+        let firstNumStorageArr = firstNum.split("");
+        let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+
+        let storageArr = displayStorage.split("");
+        let lastStorageEl = storageArr[storageArr.length - 1];
+
+        if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+            return null;
+        };
+    };
+
+    isDecimalUsed = true;
+};
+
+function controlPercentage(value) {
+    let val = value;
+
+    // Remove the previosly chosen operator because instead of typing the second number, the user pressed "%" (he wants to put it instead of the operator).
+    if (isSecondNum && secondNum.length === 0) {
+        let storageArr = displayStorage.split("");
+        isSecondNum = false;
+        chosenOperator = "";
+        storageArr.splice(-3, 3);
+        displayStorage = storageArr.join("");
+        updateDisplay();
+    };
+
+    isPercentageUsed = true;
+
+    if (isSecondNum) {
+        getPercentage(firstNum, secondNum);
+        displayStorage += val;
+        updateDisplay();
+    } else {
+        getPercentage(firstNum, null);
+        displayStorage += val;
+        updateDisplay();
+    };
+};
+
 digits.forEach(digit => {
     digit.addEventListener("click", function() {
         const value = this.textContent;
@@ -125,56 +177,13 @@ digits.forEach(digit => {
 
         // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
         if (value === "." && isDecimalUsed === false) {
-            if (isSecondNum) {
-                let secondNumStorageArr = secondNum.split("");
-                let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
-
-                let storageArr = displayStorage.split("");
-                let lastStorageEl = storageArr[storageArr.length - 1];
-
-                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-                    return null;
-                };
-            } else if (!isSecondNum) {
-                let firstNumStorageArr = firstNum.split("");
-                let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
-
-                let storageArr = displayStorage.split("");
-                let lastStorageEl = storageArr[storageArr.length - 1];
-
-                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-                    return null;
-                };
-            };
-
-            console.log("trigger");
-            isDecimalUsed = true;
+            controlDecimals();
         } else if (value === "." && isDecimalUsed === true) {
             return null;
         };
 
         if (value === "%" && isPercentageUsed === false) {
-            // Remove the previosly chosen operator because instead of typing the second number, the user pressed "%" (he wants to put it instead of the operator).
-            if (isSecondNum && secondNum.length === 0) {
-                let storageArr = displayStorage.split("");
-                isSecondNum = false;
-                chosenOperator = "";
-                storageArr.splice(-3, 3);
-                displayStorage = storageArr.join("");
-                updateDisplay();
-            };
-
-            isPercentageUsed = true;
-
-            if (isSecondNum) {
-                getPercentage(firstNum, secondNum);
-                displayStorage += value;
-                updateDisplay();
-            } else {
-                getPercentage(firstNum, null);
-                displayStorage += value;
-                updateDisplay();
-            };
+            controlPercentage(value);
         } else if (value === "%" && isPercentageUsed === true) {
             return null;
         };
@@ -182,7 +191,7 @@ digits.forEach(digit => {
 
         if (isPercentageUsed) {
             return null
-        }
+        };
 
 
         if (isSecondNum) {
@@ -256,7 +265,7 @@ clearBtn.addEventListener("click", function() {
     updateDisplay();
 });
 
-function removeLastItem(storageArr) {
+function removeLastDisplayItem(storageArr) {
     storageArr.pop();
     displayStorage = storageArr.join("");
 };
@@ -279,10 +288,10 @@ backspaceBtn.addEventListener("click", function() {
         return updateDisplay();
     };
 
+    // Remove decimals from the numbers storage.
     if (storageArr[lastIndex] === ".") {
         isDecimalUsed = false;
 
-        // Remove decimals from the numbers storage.
         if (isSecondNum) {
             let secondNumStorageArr = secondNum.split("");
             secondNumStorageArr.pop();
@@ -293,7 +302,7 @@ backspaceBtn.addEventListener("click", function() {
             firstNum = firstNumStorageArr.join("");
         };
 
-        removeLastItem(storageArr);
+        removeLastDisplayItem(storageArr);
         return updateDisplay();
     } else if (storageArr[lastIndex] === "%") {
         isPercentageUsed = false;
@@ -305,7 +314,7 @@ backspaceBtn.addEventListener("click", function() {
             refreshPercentages();
         };
 
-        removeLastItem(storageArr);
+        removeLastDisplayItem(storageArr);
         return updateDisplay();
     };
 
@@ -320,6 +329,59 @@ backspaceBtn.addEventListener("click", function() {
         firstNum = firstNumStorageArr.join("");
     };
 
-    removeLastItem(storageArr);
+    removeLastDisplayItem(storageArr);
     return updateDisplay();
 });
+
+// Keyboard support
+document.addEventListener("keydown", function(event) {
+    const value = event.code;
+    let pressedBtn = "";
+    console.log(value);
+
+    // Block possibility to edit previous operation
+    if (displayPreviousStorage.length > 0 && !isSecondNum) {
+        return null;
+    };
+
+    console.log(value === "NumpadDecimal", isDecimalUsed === false);
+    // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
+    if (value === "NumpadDecimal" && isDecimalUsed === false) {
+        controlDecimals();
+        pressedBtn = ".";
+    } else if (value === "NumpadDecimal" && isDecimalUsed === true) {
+        return null;
+    };
+
+    if (value === "%" && isPercentageUsed === false) {
+        controlPercentage(value);
+    } else if (value === "%" && isPercentageUsed === true) {
+        return null;
+    };
+
+
+    if (isPercentageUsed) {
+        return null
+    };
+
+    // Numbers
+    let numpadNumsRegex = /Numpad[0-9]/i;
+    let digitRegex = /Digit[0-9]/i;
+
+    if (numpadNumsRegex.test(value) || digitRegex.test(value)) {
+        let getNum = value.match(/[0-9]/);
+        pressedBtn = getNum.toString();
+    };
+
+
+    if (isSecondNum) {
+        secondNum += pressedBtn;
+    } else {
+        firstNum += pressedBtn;
+    };
+
+    displayStorage += pressedBtn;
+    updateDisplay();
+});
+
+// To fix: prevent possibility to use unneeded zeros before the number
