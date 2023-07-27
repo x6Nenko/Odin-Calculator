@@ -114,31 +114,31 @@ function operate(chosenOperator, firstNum, secondNum) {
     };
 };
 
-function controlDecimals() {
-    if (isSecondNum) {
-        let secondNumStorageArr = secondNum.split("");
-        let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
+// function controlDecimals() {
+//     if (isSecondNum) {
+//         let secondNumStorageArr = secondNum.split("");
+//         let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
 
-        let storageArr = displayStorage.split("");
-        let lastStorageEl = storageArr[storageArr.length - 1];
+//         let storageArr = displayStorage.split("");
+//         let lastStorageEl = storageArr[storageArr.length - 1];
 
-        if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-            return null;
-        };
-    } else if (!isSecondNum) {
-        let firstNumStorageArr = firstNum.split("");
-        let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+//         if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+//             return null;
+//         };
+//     } else if (!isSecondNum) {
+//         let firstNumStorageArr = firstNum.split("");
+//         let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
 
-        let storageArr = displayStorage.split("");
-        let lastStorageEl = storageArr[storageArr.length - 1];
+//         let storageArr = displayStorage.split("");
+//         let lastStorageEl = storageArr[storageArr.length - 1];
 
-        if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-            return null;
-        };
-    };
+//         if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+//             return null;
+//         };
+//     };
 
-    isDecimalUsed = true;
-};
+//     isDecimalUsed = true;
+// };
 
 function controlPercentage(value) {
     let val = value;
@@ -177,7 +177,29 @@ digits.forEach(digit => {
 
         // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
         if (value === "." && isDecimalUsed === false) {
-            controlDecimals();
+            if (isSecondNum) {
+                let secondNumStorageArr = secondNum.split("");
+                let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
+        
+                let storageArr = displayStorage.split("");
+                let lastStorageEl = storageArr[storageArr.length - 1];
+        
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                    return null;
+                };
+            } else if (!isSecondNum) {
+                let firstNumStorageArr = firstNum.split("");
+                let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+        
+                let storageArr = displayStorage.split("");
+                let lastStorageEl = storageArr[storageArr.length - 1];
+        
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                    return null;
+                };
+            };
+        
+            isDecimalUsed = true;
         } else if (value === "." && isDecimalUsed === true) {
             return null;
         };
@@ -270,7 +292,7 @@ function removeLastDisplayItem(storageArr) {
     displayStorage = storageArr.join("");
 };
 
-backspaceBtn.addEventListener("click", function() {
+function backspace() {
     let storageArr = displayStorage.split("");
     let lastIndex = storageArr.length -1;
 
@@ -331,31 +353,109 @@ backspaceBtn.addEventListener("click", function() {
 
     removeLastDisplayItem(storageArr);
     return updateDisplay();
+};
+
+backspaceBtn.addEventListener("click", function() {
+    backspace();
 });
 
 // Keyboard support
+function controlOperator(value) {
+    let pressedOperator = "";
+
+    if (value === "NumpadAdd") pressedOperator = "+";
+    if (value === "NumpadSubtract") pressedOperator = "-";
+    if (value === "NumpadMultiply") pressedOperator = "x";
+    if (value === "NumpadDivide") pressedOperator = "/";
+
+    if (chosenOperator.length > 0) {
+        if (firstNum.length > 0 && secondNum.length > 0) {
+            preOperate();
+            updateDisplay();
+            ifPercentage();
+            operate(chosenOperator, +firstNum, +secondNum);
+        } else {
+            chosenOperator = pressedOperator;
+            displayStorage = `${firstNum} ${chosenOperator} `
+            return updateDisplay();
+        };
+    };
+    chosenOperator = pressedOperator;
+    displayStorage += ` ${pressedOperator} `;
+    isSecondNum = true;
+    isDecimalUsed = false;
+    isPercentageUsed = false;
+};
+
 document.addEventListener("keydown", function(event) {
     const value = event.code;
     let pressedBtn = "";
-    console.log(value);
+
+    if (value === "NumpadAdd" || value === "NumpadSubtract" || value === "NumpadMultiply" || value === "NumpadDivide") {
+        console.log("check");
+        controlOperator(value);
+        return updateDisplay();
+    };
+
+    if (value === "Escape") {
+        refreshStorages();
+        displayStorage = "";
+        displayPreviousStorage = "";
+        isSecondNum = false;
+        return updateDisplay();
+    };
 
     // Block possibility to edit previous operation
     if (displayPreviousStorage.length > 0 && !isSecondNum) {
         return null;
     };
 
-    console.log(value === "NumpadDecimal", isDecimalUsed === false);
+    if (value === "NumpadEnter") {
+        if (firstNum.length > 0 && secondNum.length > 0) {
+            preOperate();
+            updateDisplay();
+            ifPercentage();
+            operate(chosenOperator, +firstNum, +secondNum);
+        };
+    };
+
+    if (value === "Backspace") {
+        backspace();
+    };
+
     // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
-    if (value === "NumpadDecimal" && isDecimalUsed === false) {
-        controlDecimals();
+    if (value === "NumpadDecimal" && isDecimalUsed === false || value === "Period" && isDecimalUsed === false) {
+        if (isSecondNum) {
+            let secondNumStorageArr = secondNum.split("");
+            let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
+    
+            let storageArr = displayStorage.split("");
+            let lastStorageEl = storageArr[storageArr.length - 1];
+    
+            if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                return null;
+            };
+        } else if (!isSecondNum) {
+            let firstNumStorageArr = firstNum.split("");
+            let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+    
+            let storageArr = displayStorage.split("");
+            let lastStorageEl = storageArr[storageArr.length - 1];
+    
+            if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                return null;
+            };
+        };
+    
+        isDecimalUsed = true;
         pressedBtn = ".";
     } else if (value === "NumpadDecimal" && isDecimalUsed === true) {
         return null;
     };
 
-    if (value === "%" && isPercentageUsed === false) {
-        controlPercentage(value);
-    } else if (value === "%" && isPercentageUsed === true) {
+    if (event.shiftKey && value === "Digit5" && isPercentageUsed === false) {
+        controlPercentage("%");
+    } else if (event.shiftKey && value === "Digit5" && isPercentageUsed === true) {
         return null;
     };
 
@@ -364,11 +464,10 @@ document.addEventListener("keydown", function(event) {
         return null
     };
 
-    // Numbers
-    let numpadNumsRegex = /Numpad[0-9]/i;
-    let digitRegex = /Digit[0-9]/i;
 
-    if (numpadNumsRegex.test(value) || digitRegex.test(value)) {
+    let numpadNumsRegex = /Numpad[0-9]/i;
+
+    if (numpadNumsRegex.test(value)) {
         let getNum = value.match(/[0-9]/);
         pressedBtn = getNum.toString();
     };
@@ -383,5 +482,3 @@ document.addEventListener("keydown", function(event) {
     displayStorage += pressedBtn;
     updateDisplay();
 });
-
-// To fix: prevent possibility to use unneeded zeros before the number
