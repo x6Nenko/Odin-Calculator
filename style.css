@@ -11,6 +11,7 @@ body {
     background-color: #DAF0FE;
     font-family: 'Quicksand', sans-serif;
     font-weight: 500;
+    height: 100vh;
 }
 
 button {
