@@ -21,6 +21,7 @@ let isDecimalUsed = false;
 let firstNumPercentage = "";
 let secondNumPercentage = "";
 
+
 function refreshStorages() {
     firstNum = "";
     secondNum = "";
@@ -43,7 +44,8 @@ function updateStorages(result) {
     firstNum += result;
     displayPreviousStorage = displayStorage + result;
     displayStorage = result;
-}
+};
+
 
 function add(a, b) {
     let result = (a + b).toFixed(2).replace(/\.?0*$/,'');
@@ -72,6 +74,7 @@ function divide(a, b) {
     updateStorages(result);
     updateDisplay();
 };
+
 
 function getPercentage(a, b) {
     if (b === null) {
@@ -103,34 +106,13 @@ function operate(chosenOperator, firstNum, secondNum) {
     };
 };
 
-// function controlDecimals() {
-//     if (isSecondNum) {
-//         let secondNumStorageArr = secondNum.split("");
-//         let lastEl = secondNumStorageArr[secondNumStorageArr.length - 1];
-
-//         let storageArr = displayStorage.split("");
-//         let lastStorageEl = storageArr[storageArr.length - 1];
-
-//         if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-//             return null;
-//         };
-//     } else if (!isSecondNum) {
-//         let firstNumStorageArr = firstNum.split("");
-//         let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
-
-//         let storageArr = displayStorage.split("");
-//         let lastStorageEl = storageArr[storageArr.length - 1];
-
-//         if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
-//             return null;
-//         };
-//     };
-
-//     isDecimalUsed = true;
-// };
-
 function controlPercentage(value) {
     let val = value;
+
+
+    if (isSecondNum && secondNum.length === 0 && firstNumPercentage.length > 0) {
+        return null;
+    };
 
     // Remove the previosly chosen operator because instead of typing the second number, the user pressed "%" (he wants to put it instead of the operator).
     if (isSecondNum && secondNum.length === 0) {
@@ -141,6 +123,7 @@ function controlPercentage(value) {
         displayStorage = storageArr.join("");
         updateDisplay();
     };
+
 
     isPercentageUsed = true;
 
@@ -155,6 +138,7 @@ function controlPercentage(value) {
     };
 };
 
+
 digits.forEach(digit => {
     digit.addEventListener("click", function() {
         const value = this.textContent;
@@ -162,6 +146,16 @@ digits.forEach(digit => {
         // Block possibility to edit previous operation
         if (displayPreviousStorage.length > 0 && !isSecondNum) {
             return null;
+        };
+
+        if (isSecondNum) {
+            if (value === "0" && +secondNum === 0 && secondNum.length === 1) {
+                return null;
+            };
+        } else {
+            if (value === "0" && +firstNum === 0 && firstNum.length === 1) {
+                return null;
+            };
         };
 
         // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
@@ -194,6 +188,13 @@ digits.forEach(digit => {
         };
 
         if (value === "%" && isPercentageUsed === false) {
+            if (!isSecondNum) {
+                let firstNumStorageArr = firstNum.split("");
+                let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+                if (lastEl === undefined) {
+                    return null;
+                };
+            };
             controlPercentage(value);
         } else if (value === "%" && isPercentageUsed === true) {
             return null;
@@ -206,8 +207,21 @@ digits.forEach(digit => {
 
 
         if (isSecondNum) {
+            if (+secondNum === 0 && secondNum.length === 1 && value !== "." && value !== "%") {
+                secondNum = value;
+                let storageArr = displayStorage.split("");
+                storageArr.pop();
+                displayStorage = storageArr.join("");
+                displayStorage += value;
+                return updateDisplay();
+            };
             secondNum += value;
         } else {
+            if (+firstNum === 0 && firstNum.length === 1 && value !== "." && value !== "%") {
+                firstNum = value;
+                displayStorage = value;
+                return updateDisplay();
+            };
             firstNum += value;
         };
 
@@ -215,6 +229,7 @@ digits.forEach(digit => {
         updateDisplay();
     });
 });
+
 
 function preOperate() {
     displayStorage += " = ";
@@ -259,6 +274,7 @@ operators.forEach(operator => {
     });
 });
 
+
 resultBtn.addEventListener("click", function() {
     if (firstNum.length > 0 && secondNum.length > 0) {
         preOperate();
@@ -275,6 +291,7 @@ clearBtn.addEventListener("click", function() {
     isSecondNum = false;
     updateDisplay();
 });
+
 
 function removeLastDisplayItem(storageArr) {
     storageArr.pop();
@@ -351,6 +368,7 @@ backspaceBtn.addEventListener("click", function() {
     backspace();
 });
 
+
 // ========== Keyboard support
 function controlOperator(value) {
     let pressedOperator = "";
@@ -384,7 +402,6 @@ document.addEventListener("keydown", function(event) {
     let pressedBtn = "";
 
     if (value === "NumpadAdd" || value === "NumpadSubtract" || value === "NumpadMultiply" || value === "NumpadDivide") {
-        console.log("check");
         controlOperator(value);
         return updateDisplay();
     };
@@ -413,6 +430,16 @@ document.addEventListener("keydown", function(event) {
 
     if (value === "Backspace") {
         backspace();
+    };
+
+    if (isSecondNum) {
+        if (value === "Numpad0" && +secondNum === 0 && secondNum.length === 1) {
+            return null;
+        };
+    } else {
+        if (value === "Numpad0" && +firstNum === 0 && firstNum.length === 1) {
+            return null;
+        };
     };
 
     // Allow decimals only when it makes sense. Disable such an option right after %, the operator, and as the very first input.
@@ -445,9 +472,16 @@ document.addEventListener("keydown", function(event) {
         return null;
     };
 
-    if (event.shiftKey && value === "Digit5" && isPercentageUsed === false) {
+    if (value === "Digit5" && isPercentageUsed === false) {
+        if (!isSecondNum) {
+            let firstNumStorageArr = firstNum.split("");
+            let lastEl = firstNumStorageArr[firstNumStorageArr.length - 1];
+            if (lastEl === undefined) {
+                return null;
+            };
+        };
         controlPercentage("%");
-    } else if (event.shiftKey && value === "Digit5" && isPercentageUsed === true) {
+    } else if (value === "Digit5" && isPercentageUsed === true) {
         return null;
     };
 
@@ -466,13 +500,24 @@ document.addEventListener("keydown", function(event) {
 
 
     if (isSecondNum) {
+        if (+secondNum === 0 && secondNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
+            secondNum = pressedBtn;
+            let storageArr = displayStorage.split("");
+            storageArr.pop();
+            displayStorage = storageArr.join("");
+            displayStorage += pressedBtn;
+            return updateDisplay();
+        };
         secondNum += pressedBtn;
     } else {
+        if (+firstNum === 0 && firstNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
+            firstNum = pressedBtn;
+            displayStorage = pressedBtn;
+            return updateDisplay();
+        };
         firstNum += pressedBtn;
     };
 
     displayStorage += pressedBtn;
     updateDisplay();
 });
-
-// To fix: prevent possibility to use unneeded zeros before the number
