@@ -167,7 +167,7 @@ digits.forEach(digit => {
                 let storageArr = displayStorage.split("");
                 let lastStorageEl = storageArr[storageArr.length - 1];
         
-                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined || secondNum.length >= 9) {
                     return null;
                 };
             } else if (!isSecondNum) {
@@ -177,7 +177,7 @@ digits.forEach(digit => {
                 let storageArr = displayStorage.split("");
                 let lastStorageEl = storageArr[storageArr.length - 1];
         
-                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined) {
+                if (lastStorageEl === "%" || lastStorageEl === " " || lastEl === undefined || secondNum.length >= 9) {
                     return null;
                 };
             };
@@ -449,8 +449,16 @@ document.addEventListener("keydown", function(event) {
         if (value === "Numpad0" && +secondNum === 0 && secondNum.length === 1) {
             return null;
         };
+
+        if (secondNum.length >= 9 && value !== "Digit5") {
+            return null;
+        };
     } else {
         if (value === "Numpad0" && +firstNum === 0 && firstNum.length === 1) {
+            return null;
+        };
+
+        if (firstNum.length >= 9 && value !== "Digit5") {
             return null;
         };
     };
@@ -513,10 +521,6 @@ document.addEventListener("keydown", function(event) {
 
 
     if (isSecondNum) {
-        if (secondNum.length >= 9) {
-            return null;
-        };
-
         if (+secondNum === 0 && secondNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
             secondNum = pressedBtn;
             let storageArr = displayStorage.split("");
@@ -527,10 +531,6 @@ document.addEventListener("keydown", function(event) {
         };
         secondNum += pressedBtn;
     } else {
-        if (firstNum.length >= 9) {
-            return null;
-        };
-
         if (+firstNum === 0 && firstNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
             firstNum = pressedBtn;
             displayStorage = pressedBtn;

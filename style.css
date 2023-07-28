@@ -69,7 +69,7 @@ button {
 }
 
 .display-container .display:last-child {
-    font-size: 2rem;
+    font-size: 1.9rem;
 }
 
 .display {
@@ -129,4 +129,45 @@ footer p {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+@media screen and (max-width: 500px) {
+    body {
+        overflow: hidden;
+    }
+
+    button {
+        font-size: 1.3rem;
+    }
+    
+    .bg-holder {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background-image: url(./assets/Vector.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 400px;
+        animation: rotate 5s infinite linear; 
+    }
+
+    .calculator-container {
+        padding: 30px 20px;
+        width: 320px;
+        height: 520px;
+    }
+
+    .display-container .display:first-child {
+        font-size: 1rem;
+        color: #737373;
+    }
+    
+    .display-container .display:last-child {
+        font-size: 1.5rem;
+    }
+    
+    button {
+        width: unset;
+        height: 50px;
+    }
 }
