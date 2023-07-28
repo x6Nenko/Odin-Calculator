@@ -119,3 +119,14 @@ footer {
     text-align: center;
     margin-top: 50px;
 }
+
+.icon {
+    width: 32px;
+    height: 32px;
+}
+
+footer p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

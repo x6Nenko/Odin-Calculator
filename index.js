@@ -207,6 +207,10 @@ digits.forEach(digit => {
 
 
         if (isSecondNum) {
+            if (secondNum.length >= 9) {
+                return null;
+            };
+
             if (+secondNum === 0 && secondNum.length === 1 && value !== "." && value !== "%") {
                 secondNum = value;
                 let storageArr = displayStorage.split("");
@@ -217,6 +221,10 @@ digits.forEach(digit => {
             };
             secondNum += value;
         } else {
+            if (firstNum.length >= 9) {
+                return null;
+            };
+
             if (+firstNum === 0 && firstNum.length === 1 && value !== "." && value !== "%") {
                 firstNum = value;
                 displayStorage = value;
@@ -505,6 +513,10 @@ document.addEventListener("keydown", function(event) {
 
 
     if (isSecondNum) {
+        if (secondNum.length >= 9) {
+            return null;
+        };
+
         if (+secondNum === 0 && secondNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
             secondNum = pressedBtn;
             let storageArr = displayStorage.split("");
@@ -515,6 +527,10 @@ document.addEventListener("keydown", function(event) {
         };
         secondNum += pressedBtn;
     } else {
+        if (firstNum.length >= 9) {
+            return null;
+        };
+
         if (+firstNum === 0 && firstNum.length === 1 && value !== "NumpadDecimal" && value !== "Digit5") {
             firstNum = pressedBtn;
             displayStorage = pressedBtn;
