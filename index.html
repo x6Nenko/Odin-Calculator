@@ -3,41 +3,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="bg-holder"></div>
     
     <main>
-        <div class="display-container">
-            <div class="display" id="previousDisplay"></div>
-            <div class="display" id="display"></div>
+
+        <div class="calculator-container">
+            <div class="display-container">
+                <div class="display" id="previousDisplay"></div>
+                <div class="display" id="display"></div>
+            </div>
+
+            <div class="buttons-container">
+                <button class="other remove-buttons" id="clearBtn">AC</button>
+                <button class="other remove-buttons" id="backspaceBtn">C</button>
+                <button class="digit colored-buttons" id="percentageBtn">%</button>
+                <button class="operator colored-buttons">/</button>
+
+                <button class="digit">7</button>
+                <button class="digit">8</button>
+                <button class="digit">9</button>
+                <button class="operator colored-buttons">x</button>
+
+                <button class="digit">4</button>
+                <button class="digit">5</button>
+                <button class="digit">6</button>
+                <button class="operator colored-buttons">-</button>
+
+                <button class="digit">1</button>
+                <button class="digit">2</button>
+                <button class="digit">3</button>
+                <button class="operator colored-buttons">+</button>
+
+                <button class="digit" id="decimalBtn">.</button>
+                <button class="digit">0</button>
+                <button class="resultOperator" id="resultBtn">=</button>
+            </div>
         </div>
 
-        <div class="buttons-container">
-            <button class="other" id="clearBtn">AC</button>
-            <button class="other" id="backspaceBtn">C</button>
-            <button class="digit" id="percentageBtn">%</button>
-            <button class="operator">/</button>
-
-            <button class="digit">7</button>
-            <button class="digit">8</button>
-            <button class="digit">9</button>
-            <button class="operator">x</button>
-
-            <button class="digit">4</button>
-            <button class="digit">5</button>
-            <button class="digit">6</button>
-            <button class="operator">-</button>
-
-            <button class="digit">1</button>
-            <button class="digit">2</button>
-            <button class="digit">3</button>
-            <button class="operator">+</button>
-
-            <button class="digit" id="decimalBtn">.</button>
-            <button class="digit">0</button>
-            <button class="resultOperator" id="resultBtn">=</button>
-        </div>
+        <footer>
+            Made by Maximilian NDev.
+        </footer>
 
     </main>
 

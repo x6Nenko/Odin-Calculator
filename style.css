@@ -1,19 +1,121 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #DAF0FE;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
 }
 
-main {
-    border: 2px solid slateblue;
-    padding: 30px;
+button {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.bg-holder {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background-image: url(./assets/Vector.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 500px;
+    animation: rotate 5s infinite linear; 
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg); /* Start rotation from 0 degrees */
+    }
+    to {
+        transform: rotate(-360deg); /* End rotation at 360 degrees (full circle) */
+    }
+}
+
+.calculator-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 40px 30px;
+    width: 400px;
+    height: 650px;
+    border-radius: 30px;
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: linear-gradient(315deg, rgba(218, 240, 254, 0.90) 0%, rgba(255, 255, 255, 0.70) 100%);
+    box-shadow: 0px 6.650102138519287px 5.32008171081543px 0px rgba(114, 114, 114, 0.03), 0px 12.521552085876465px 10.017241477966309px 0px rgba(114, 114, 114, 0.04), 0px 22.3363094329834px 17.869047164916992px 0px rgba(114, 114, 114, 0.04), 0px 41.777610778808594px 33.422088623046875px 0px rgba(114, 114, 114, 0.05), 0px 100px 80px 0px rgba(114, 114, 114, 0.07), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+}
+
+.display-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.display-container .display:first-child {
+    font-size: 1.2rem;
+    color: #737373;
+}
+
+.display-container .display:last-child {
+    font-size: 2rem;
+}
+
+.display {
+    text-align: right;
 }
 
 .buttons-container {
     display: grid;
+    gap: 20px;
     grid-template-columns: repeat(4, 1fr);
 }
 
+button {
+    border: none;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.70);
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.90);
+}
+
 .buttons-container button:last-child {
+    width: unset;
     grid-column: span 2;
+}
+
+.colored-buttons {
+    background: rgba(112, 199, 255, 0.70);
+}
+
+.colored-buttons:hover {
+    background: rgba(112, 199, 255, 0.90);
+}
+
+.remove-buttons {
+    background: rgba(220, 244, 255, 0.70);
+}
+
+.remove-buttons:hover {
+    background: rgba(220, 244, 255, 0.90);
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
 }

@@ -265,6 +265,11 @@ operators.forEach(operator => {
                 return updateDisplay();
             };
         };
+
+        if (firstNum.length === 0) {
+            return null;
+        };
+
         chosenOperator = value;
         displayStorage += ` ${value} `;
         isSecondNum = true;
